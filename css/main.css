@@ -915,9 +915,9 @@ ul.nostyle i {
 #get-in-touch {
   padding: 100px 0 50px;
   /*background: #132125 url(../images/info/impress2.jpg) repeat 0 0;*/
-  /*background-image: -moz-linear-gradient(90deg, #7CBFF4 0%, #A3EBB1 100%);
+  background-image: -moz-linear-gradient(90deg, #7CBFF4 0%, #A3EBB1 100%);
   background-image: -webkit-linear-gradient(90deg, #7CBFF4 0%, #A3EBB1 100%);
-  background-image: -ms-linear-gradient(90deg, #7CBFF4 0%, #A3EBB1 100%);*/
+  background-image: -ms-linear-gradient(90deg, #7CBFF4 0%, #A3EBB1 100%);
   color: #fff;
   font-size: 125%;
 }
