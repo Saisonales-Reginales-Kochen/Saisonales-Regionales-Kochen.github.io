@@ -104,6 +104,198 @@
                 $(this).addClass('active');
             });
     }
+	    
+	    async function get_rezept(text) {
+    const res = await fetch("https://libretranslate.de/translate", {
+	method: "POST",
+	body: JSON.stringify({
+		q: text,
+		source: "de",
+		target: "en"
+	}),
+	headers: { "Content-Type": "application/json" }
+	});
+	var reser = await res.json();
+    var frucht = reser.translatedText;
+    console.log(frucht);
+    let requestString = "https://api.spoonacular.com/recipes/complexSearch?";
+    $.get(requestString,{
+                query: frucht,
+                instructionsRequired: true,
+                fillIngredients: true,
+                number: 1,
+                addRecipeInformation: true,
+                sort: "random",
+                apiKey: '77761af884614b78ac8ac4a488cda91d'
+                },
+                async function(data){
+                    console.log(data);
+                    let requestString = "https://api.spoonacular.com//recipes/"+data.results[0].id+"/information?";
+                    $.get(requestString,{
+                    number: 1,
+                    apiKey: '77761af884614b78ac8ac4a488cda91d'
+                    },
+                        function(data1){
+                            console.log(data1.results);
+                        });
+                    console.log(data.results);
+                    console.log(data.results[0].id);
+                    console.log(data.results[0].title);
+                    console.log(data.results[0].image);
+                    console.log(data.results[0].extendedIngredients);
+                    console.log(data.results[0].analyzedInstructions);
+
+                    //bild & titel
+                    const res = await fetch("https://libretranslate.de/translate", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        q: data.results[0].title,
+                        source: "en",
+                        target: "de"
+                    }),
+                    headers: { "Content-Type": "application/json" }
+                    });
+                    var reser = await res.json();
+                    var title = reser.translatedText;
+                    //document.getElementById("rezept").innerHTML = "<h3>"+data.results[0].title+"</h3><img src="+data.results[0].image+" alt='"+data.results[0].title+"'><br>";
+                    //document.getElementById("inhalt2").innerHTML = "<h3>"+title+"</h3><img src="+data.results[0].image+" alt='"+title+"'><br>";
+
+                    document.getElementById("rezept").innerHTML ='<div><div class="fancyboxIframe" >' +
+                                    '<a data-fancybox-type="iframe" aria-label="Rezept" class="fancyboxIframe" href="' + data.results[0].sourceUrl + '" target="_blank" ><img src="' + data.results[0].image + '" class="img-responsive thumbnail" alt="Rezept Bild"></a>' +
+                                    '</div>' +
+                                    '<div class=".fancyboxIframe2">' +
+                                        '<h3 class="Vtitle fancyboxIframe2"><a data-fancybox-type="iframe" class="fancyboxIframe2" href="' + data.results[0].sourceUrl + '" target="_blank">' + title + '</a></h3>'+
+                                    '</div>';
+                                    /*
+                                    <div  id="cTitle"><i>'+htlm_rezept_text+'</i></div></div>' +
+                                '<div class="clearfix"></div>';
+                                */
+
+                    //erklärung & zusammenfassung
+                    console.log(data.results[0].summary);
+                    const res2 = await fetch("https://libretranslate.de/translate", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            q: data.results[0].summary,
+                            source: "en",
+                            target: "de"
+                        }),
+                        headers: { "Content-Type": "application/json" }
+                        });
+                        var reser = await res2.json();
+                        var summary = reser.translatedText;
+                    //document.getElementById("beschreibung").innerHTML = data.results[0].summary;
+                    //document.getElementById("beschreibung").innerHTML = summary;
+                    document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><b>Beschreibung</b><br><p>"+summary+"</p></div><br><br>";
+                    
+                    //rezeptzutaten & menge
+                    for (item in data.results[0].extendedIngredients){
+                        console.log(data.results[0].extendedIngredients[item].name);
+                        const res = await fetch("https://libretranslate.de/translate", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            q: data.results[0].extendedIngredients[item].name,
+                            source: "en",
+                            target: "de"
+                        }),
+                        headers: { "Content-Type": "application/json" }
+                        });
+                        var reser = await res.json();
+                        var ingredient = reser.translatedText;
+                        //document.getElementById("tabelle_inhalt").innerHTML += "<li id='inhalt_"+item+"'>"+ data.results[0].extendedIngredients[item].name +"</li>";
+                        //document.getElementById("tabelle_inhalt").innerHTML += "<li id='inhalt_"+item+"'>"+ ingredient+"</li>";
+                        if(item == 0){
+                            document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><b>Zutaten</b><br><p><ul id='zutaten_'></ul></p></div>";
+                        }
+                        document.getElementById("zutaten_").innerHTML += "<li id='inhalt_"+item+"'>"+ ingredient+"</li>";
+                        
+                        console.log(data.results[0].extendedIngredients[item].amount+" "+data.results[0].extendedIngredients[item].unit);
+                        if(data.results[0].extendedIngredients[item].unit){
+                        const res3 = await fetch("https://libretranslate.de/translate", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            q: data.results[0].extendedIngredients[item].unit,
+                            source: "en",
+                            target: "de"
+                        }),
+                        headers: { "Content-Type": "application/json" }
+                        });
+                        var reser = await res3.json();
+                        var einheit = reser.translatedText;
+                        //document.getElementById("inhalt_"+item).innerHTML += "  "+data.results[0].extendedIngredients[item].amount+" "+data.results[0].extendedIngredients[item].unit;
+                        document.getElementById("inhalt_"+item).innerHTML += "  "+data.results[0].extendedIngredients[item].amount+" "+einheit;
+                        }
+                        if(item == data.results[0].extendedIngredients.length-1){
+                            document.getElementById("rezept").innerHTML += "<br><br>";
+                        }
+                    }
+
+                     //werkzeug
+                     if(data.results[0].analyzedInstructions[0] != undefined){
+                     if(data.results[0].analyzedInstructions[0].steps[0].equipment != undefined){
+                        for (item in data.results[0].analyzedInstructions[0].steps[0].equipment){
+                            console.log(data.results[0].analyzedInstructions[0].steps[0].equipment[item].name);
+                            
+                            const res = await fetch("https://libretranslate.de/translate", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                q: data.results[0].analyzedInstructions[0].steps[0].equipment[item].name,
+                                source: "en",
+                                target: "de"
+                            }),
+                            headers: { "Content-Type": "application/json" }
+                            });
+                            var reser = await res.json();
+                            var equipment = reser.translatedText;
+                            //document.getElementById("werkzeug").innerHTML += ", "+ data.results[0].analyzedInstructions[0].steps[0].equipment[item].name;
+                            if(item == 0){
+                                //document.getElementById("werkzeug").innerHTML += equipment;
+                                document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><b>Equipment</b><br></div>";
+                                document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><p id='werkzeug_'>"+equipment+"</p></div>";
+                            }
+                            else{
+                                //document.getElementById("werkzeug").innerHTML += ", "+ equipment;
+                                document.getElementById("werkzeug_").innerHTML += ", "+ equipment;
+                            }
+                            if(item == data.results[0].analyzedInstructions[0].steps[0].equipment.length-1){
+                                document.getElementById("rezept").innerHTML += "<br><br>";
+                            } 
+                        }
+                    }
+                    }
+
+                    //zubereitungsbeschreibung
+                    var stepzahl =0
+                    for (item in data.results[0].analyzedInstructions[0].steps){
+                        console.log(data.results[0].analyzedInstructions[0].steps[item].step);
+                        stepzahl +=1;
+                        const res = await fetch("https://libretranslate.de/translate", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            q: data.results[0].analyzedInstructions[0].steps[item].step,
+                            source: "en",
+                            target: "de"
+                        }),
+                        headers: { "Content-Type": "application/json" }
+                        });
+                        var reser = await res.json();
+                        var step = reser.translatedText;
+                        //document.getElementById("schritte").innerHTML += "<p><b>"+ stepzahl +":</b> "+ data.results[0].analyzedInstructions[0].steps[item].step +"</p>";
+                        //document.getElementById("schritte").innerHTML += "<p><b>"+ stepzahl +":</b> "+ step +"</p>";
+                        if(item == 0){
+                            document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe' id='schritte_'><b>Zubereitung</b><br></div>";
+                        }
+                        document.getElementById("schritte_").innerHTML += "<p><b>"+ stepzahl +":</b> "+ step +"</p>";
+                        if(item == data.results[0].analyzedInstructions[0].steps.length-1){
+                            document.getElementById("rezept").innerHTML += "<br><br>";
+                        }
+                    }
+
+                    //document.getElementById("tabelle_inhalt").innerHTML ="";
+                    //document.getElementById("werkzeug").innerHTML ="";
+                    //document.getElementById("beschreibung").innerHTML ="";
+                    //document.getElementById("schritte").innerHTML ="";
+                });
 
     //intitialisierung der Seite
     function init_seite(){
@@ -276,8 +468,7 @@
 <!--<script src="js/response_get.js"></script>
 <script src="js/ruckmelden.js"></script>-->
 <script lang="javascript">
-var _0xb8fe=["\x68\x74\x74\x70\x73\x3A\x2F\x2F\x6C\x69\x62\x72\x65\x74\x72\x61\x6E\x73\x6C\x61\x74\x65\x2E\x64\x65\x2F\x74\x72\x61\x6E\x73\x6C\x61\x74\x65","\x50\x4F\x53\x54","\x64\x65","\x65\x6E","\x73\x74\x72\x69\x6E\x67\x69\x66\x79","\x61\x70\x70\x6C\x69\x63\x61\x74\x69\x6F\x6E\x2F\x6A\x73\x6F\x6E","\x6A\x73\x6F\x6E","\x74\x72\x61\x6E\x73\x6C\x61\x74\x65\x64\x54\x65\x78\x74","\x6C\x6F\x67","\x68\x74\x74\x70\x73\x3A\x2F\x2F\x61\x70\x69\x2E\x73\x70\x6F\x6F\x6E\x61\x63\x75\x6C\x61\x72\x2E\x63\x6F\x6D\x2F\x72\x65\x63\x69\x70\x65\x73\x2F\x63\x6F\x6D\x70\x6C\x65\x78\x53\x65\x61\x72\x63\x68\x3F","\x72\x61\x6E\x64\x6F\x6D","\x37\x37\x37\x36\x31\x61\x66\x38\x38\x34\x36\x31\x34\x62\x37\x38\x61\x63\x38\x61\x63\x34\x61\x34\x38\x38\x63\x64\x61\x39\x31\x64","\x68\x74\x74\x70\x73\x3A\x2F\x2F\x61\x70\x69\x2E\x73\x70\x6F\x6F\x6E\x61\x63\x75\x6C\x61\x72\x2E\x63\x6F\x6D\x2F\x2F\x72\x65\x63\x69\x70\x65\x73\x2F","\x69\x64","\x72\x65\x73\x75\x6C\x74\x73","\x2F\x69\x6E\x66\x6F\x72\x6D\x61\x74\x69\x6F\x6E\x3F","\x67\x65\x74","\x74\x69\x74\x6C\x65","\x69\x6D\x61\x67\x65","\x65\x78\x74\x65\x6E\x64\x65\x64\x49\x6E\x67\x72\x65\x64\x69\x65\x6E\x74\x73","\x61\x6E\x61\x6C\x79\x7A\x65\x64\x49\x6E\x73\x74\x72\x75\x63\x74\x69\x6F\x6E\x73","\x69\x6E\x6E\x65\x72\x48\x54\x4D\x4C","\x72\x65\x7A\x65\x70\x74","\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x3C\x64\x69\x76\x3E\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x22\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x22\x20\x3E","\x3C\x61\x20\x64\x61\x74\x61\x2D\x66\x61\x6E\x63\x79\x62\x6F\x78\x2D\x74\x79\x70\x65\x3D\x22\x69\x66\x72\x61\x6D\x65\x22\x20\x61\x72\x69\x61\x2D\x6C\x61\x62\x65\x6C\x3D\x22\x52\x65\x7A\x65\x70\x74\x22\x20\x63\x6C\x61\x73\x73\x3D\x22\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x22\x20\x68\x72\x65\x66\x3D\x22","\x73\x6F\x75\x72\x63\x65\x55\x72\x6C","\x22\x20\x74\x61\x72\x67\x65\x74\x3D\x22\x5F\x62\x6C\x61\x6E\x6B\x22\x20\x3E\x3C\x69\x6D\x67\x20\x73\x72\x63\x3D\x22","\x22\x20\x63\x6C\x61\x73\x73\x3D\x22\x69\x6D\x67\x2D\x72\x65\x73\x70\x6F\x6E\x73\x69\x76\x65\x20\x74\x68\x75\x6D\x62\x6E\x61\x69\x6C\x22\x20\x61\x6C\x74\x3D\x22\x52\x65\x7A\x65\x70\x74\x20\x42\x69\x6C\x64\x22\x3E\x3C\x2F\x61\x3E","\x3C\x2F\x64\x69\x76\x3E","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x22\x2E\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x32\x22\x3E","\x3C\x68\x33\x20\x63\x6C\x61\x73\x73\x3D\x22\x56\x74\x69\x74\x6C\x65\x20\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x32\x22\x3E\x3C\x61\x20\x64\x61\x74\x61\x2D\x66\x61\x6E\x63\x79\x62\x6F\x78\x2D\x74\x79\x70\x65\x3D\x22\x69\x66\x72\x61\x6D\x65\x22\x20\x63\x6C\x61\x73\x73\x3D\x22\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x32\x22\x20\x68\x72\x65\x66\x3D\x22","\x22\x20\x74\x61\x72\x67\x65\x74\x3D\x22\x5F\x62\x6C\x61\x6E\x6B\x22\x3E","\x3C\x2F\x61\x3E\x3C\x2F\x68\x33\x3E","\x73\x75\x6D\x6D\x61\x72\x79","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x3E\x3C\x62\x3E\x42\x65\x73\x63\x68\x72\x65\x69\x62\x75\x6E\x67\x3C\x2F\x62\x3E\x3C\x62\x72\x3E\x3C\x70\x3E","\x3C\x2F\x70\x3E\x3C\x2F\x64\x69\x76\x3E\x3C\x62\x72\x3E\x3C\x62\x72\x3E","\x6E\x61\x6D\x65","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x3E\x3C\x62\x3E\x5A\x75\x74\x61\x74\x65\x6E\x3C\x2F\x62\x3E\x3C\x62\x72\x3E\x3C\x70\x3E\x3C\x75\x6C\x20\x69\x64\x3D\x27\x7A\x75\x74\x61\x74\x65\x6E\x5F\x27\x3E\x3C\x2F\x75\x6C\x3E\x3C\x2F\x70\x3E\x3C\x2F\x64\x69\x76\x3E","\x7A\x75\x74\x61\x74\x65\x6E\x5F","\x3C\x6C\x69\x20\x69\x64\x3D\x27\x69\x6E\x68\x61\x6C\x74\x5F","\x27\x3E","\x3C\x2F\x6C\x69\x3E","\x61\x6D\x6F\x75\x6E\x74","\x20","\x75\x6E\x69\x74","\x69\x6E\x68\x61\x6C\x74\x5F","\x20\x20","\x6C\x65\x6E\x67\x74\x68","\x3C\x62\x72\x3E\x3C\x62\x72\x3E","\x65\x71\x75\x69\x70\x6D\x65\x6E\x74","\x73\x74\x65\x70\x73","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x3E\x3C\x62\x3E\x45\x71\x75\x69\x70\x6D\x65\x6E\x74\x3C\x2F\x62\x3E\x3C\x62\x72\x3E\x3C\x2F\x64\x69\x76\x3E","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x3E\x3C\x70\x20\x69\x64\x3D\x27\x77\x65\x72\x6B\x7A\x65\x75\x67\x5F\x27\x3E","\x3C\x2F\x70\x3E\x3C\x2F\x64\x69\x76\x3E","\x77\x65\x72\x6B\x7A\x65\x75\x67\x5F","\x2C\x20","\x73\x74\x65\x70","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x20\x69\x64\x3D\x27\x73\x63\x68\x72\x69\x74\x74\x65\x5F\x27\x3E\x3C\x62\x3E\x5A\x75\x62\x65\x72\x65\x69\x74\x75\x6E\x67\x3C\x2F\x62\x3E\x3C\x62\x72\x3E\x3C\x2F\x64\x69\x76\x3E","\x73\x63\x68\x72\x69\x74\x74\x65\x5F","\x3C\x70\x3E\x3C\x62\x3E","\x3A\x3C\x2F\x62\x3E\x20","\x3C\x2F\x70\x3E"];async function get_rezept2(_0x8699x2){const _0x8699x3= await fetch(_0xb8fe[0],{method:_0xb8fe[1],body:JSON[_0xb8fe[4]]({q:_0x8699x2,source:_0xb8fe[2],target:_0xb8fe[3]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xb8fe[5]}});var _0x8699x4= await _0x8699x3[_0xb8fe[6]]();var _0x8699x5=_0x8699x4[_0xb8fe[7]];console[_0xb8fe[8]](_0x8699x5);let _0x8699x6=_0xb8fe[9];$[_0xb8fe[16]](_0x8699x6,{query:_0x8699x5,instructionsRequired:true,fillIngredients:true,number:1,addRecipeInformation:true,sort:_0xb8fe[10],apiKey:_0xb8fe[11]},async function(_0x8699x7){console[_0xb8fe[8]](_0x8699x7);let _0x8699x6=_0xb8fe[12]+ _0x8699x7[_0xb8fe[14]][0][_0xb8fe[13]]+ _0xb8fe[15];$[_0xb8fe[16]](_0x8699x6,{number:1,apiKey:_0xb8fe[11]},function(_0x8699x8){console[_0xb8fe[8]](_0x8699x8[_0xb8fe[14]])});console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]]);console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[13]]);console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[17]]);console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[18]]);console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]]);console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]]);const _0x8699x3= await fetch(_0xb8fe[0],{method:_0xb8fe[1],body:JSON[_0xb8fe[4]]({q:_0x8699x7[_0xb8fe[14]][0][_0xb8fe[17]],source:_0xb8fe[3],target:_0xb8fe[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xb8fe[5]}});var _0x8699x4= await _0x8699x3[_0xb8fe[6]]();var _0x8699x9=_0x8699x4[_0xb8fe[7]];document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]= _0xb8fe[24]+ _0xb8fe[25]+ _0x8699x7[_0xb8fe[14]][0][_0xb8fe[26]]+ _0xb8fe[27]+ _0x8699x7[_0xb8fe[14]][0][_0xb8fe[18]]+ _0xb8fe[28]+ _0xb8fe[29]+ _0xb8fe[30]+ _0xb8fe[31]+ _0x8699x7[_0xb8fe[14]][0][_0xb8fe[26]]+ _0xb8fe[32]+ _0x8699x9+ _0xb8fe[33]+ _0xb8fe[29];console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[34]]);const _0x8699xa= await fetch(_0xb8fe[0],{method:_0xb8fe[1],body:JSON[_0xb8fe[4]]({q:_0x8699x7[_0xb8fe[14]][0][_0xb8fe[34]],source:_0xb8fe[3],target:_0xb8fe[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xb8fe[5]}});var _0x8699x4= await _0x8699xa[_0xb8fe[6]]();var _0x8699xb=_0x8699x4[_0xb8fe[7]];document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]+= _0xb8fe[35]+ _0x8699xb+ _0xb8fe[36];for(item in _0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]]){console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]][item][_0xb8fe[37]]);const _0x8699x3= await fetch(_0xb8fe[0],{method:_0xb8fe[1],body:JSON[_0xb8fe[4]]({q:_0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]][item][_0xb8fe[37]],source:_0xb8fe[3],target:_0xb8fe[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xb8fe[5]}});var _0x8699x4= await _0x8699x3[_0xb8fe[6]]();var _0x8699xc=_0x8699x4[_0xb8fe[7]];if(item== 0){document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]+= _0xb8fe[38]};document[_0xb8fe[23]](_0xb8fe[39])[_0xb8fe[21]]+= _0xb8fe[40]+ item+ _0xb8fe[41]+ _0x8699xc+ _0xb8fe[42];console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]][item][_0xb8fe[43]]+ _0xb8fe[44]+ _0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]][item][_0xb8fe[45]]);if(_0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]][item][_0xb8fe[45]]){const _0x8699xd= await fetch(_0xb8fe[0],{method:_0xb8fe[1],body:JSON[_0xb8fe[4]]({q:_0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]][item][_0xb8fe[45]],source:_0xb8fe[3],target:_0xb8fe[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xb8fe[5]}});var _0x8699x4= await _0x8699xd[_0xb8fe[6]]();var _0x8699xe=_0x8699x4[_0xb8fe[7]];document[_0xb8fe[23]](_0xb8fe[46]+ item)[_0xb8fe[21]]+= _0xb8fe[47]+ _0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]][item][_0xb8fe[43]]+ _0xb8fe[44]+ _0x8699xe};if(item== _0x8699x7[_0xb8fe[14]][0][_0xb8fe[19]][_0xb8fe[48]]- 1){document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]+= _0xb8fe[49]}};if(_0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0]!= undefined){if(_0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]][0][_0xb8fe[50]]!= undefined){for(item in _0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]][0][_0xb8fe[50]]){console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]][0][_0xb8fe[50]][item][_0xb8fe[37]]);const _0x8699x3= await fetch(_0xb8fe[0],{method:_0xb8fe[1],body:JSON[_0xb8fe[4]]({q:_0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]][0][_0xb8fe[50]][item][_0xb8fe[37]],source:_0xb8fe[3],target:_0xb8fe[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xb8fe[5]}});var _0x8699x4= await _0x8699x3[_0xb8fe[6]]();var _0x8699xf=_0x8699x4[_0xb8fe[7]];if(item== 0){document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]+= _0xb8fe[52];document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]+= _0xb8fe[53]+ _0x8699xf+ _0xb8fe[54]}else {document[_0xb8fe[23]](_0xb8fe[55])[_0xb8fe[21]]+= _0xb8fe[56]+ _0x8699xf};if(item== _0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]][0][_0xb8fe[50]][_0xb8fe[48]]- 1){document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]+= _0xb8fe[49]}}}};var _0x8699x10=0;for(item in _0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]]){console[_0xb8fe[8]](_0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]][item][_0xb8fe[57]]);_0x8699x10+= 1;const _0x8699x3= await fetch(_0xb8fe[0],{method:_0xb8fe[1],body:JSON[_0xb8fe[4]]({q:_0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]][item][_0xb8fe[57]],source:_0xb8fe[3],target:_0xb8fe[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xb8fe[5]}});var _0x8699x4= await _0x8699x3[_0xb8fe[6]]();var _0x8699x11=_0x8699x4[_0xb8fe[7]];if(item== 0){document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]+= _0xb8fe[58]};document[_0xb8fe[23]](_0xb8fe[59])[_0xb8fe[21]]+= _0xb8fe[60]+ _0x8699x10+ _0xb8fe[61]+ _0x8699x11+ _0xb8fe[62];if(item== _0x8699x7[_0xb8fe[14]][0][_0xb8fe[20]][0][_0xb8fe[51]][_0xb8fe[48]]- 1){document[_0xb8fe[23]](_0xb8fe[22])[_0xb8fe[21]]+= _0xb8fe[49]}}})}
-	//schauen welcher Parameter übergeben wird. Wichtig für die weiteren schritte.
+//schauen welcher Parameter übergeben wird. Wichtig für die weiteren schritte.
 function anfang(){
     rezept = getQueryVariable("r");
     if(rezept != undefined){
