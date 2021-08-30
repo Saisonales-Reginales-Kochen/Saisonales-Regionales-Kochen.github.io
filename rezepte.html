@@ -274,6 +274,7 @@
 <script src="js/wow.min.js"></script>
 <script src="js/main.js"></script>
 <script src="js/response_get.js"></script>
+<script src="js/ruckmelden.js"></script>
 <script lang="javascript">
 
 //schauen welcher Parameter übergeben wird. Wichtig für die weiteren schritte.
@@ -296,33 +297,33 @@ function anfang(){
         }
     }
     else if(rezept=="B%C3%A4rlauch"){
-        get_rezept("wild garlic");
+        get_rezept2("wild garlic");
     }
     else if(rezept=="S%C3%BC%C3%9Fkirsche"){
-        get_rezept("sweet cherry");
+        get_rezept2("sweet cherry");
     }
     else if(rezept=="Wei%C3%9Fdorn"){
-        get_rezept("hawthorn");
+        get_rezept2("hawthorn");
     }
     else if(rezept=="Rote%20Johannisbeere"){
-        get_rezept("Redcurrant");
+        get_rezept2("Redcurrant");
     }
     else if(rezept=="Felsenbirne"){
-        get_rezept("pear");
+        get_rezept2("pear");
     }
     else if(rezept=="Kornelkirsche"){
-        get_rezept("Cornus mas");
+        get_rezept2("Cornus mas");
     }
     else if(rezept=="Mirabelle"){
-        get_rezept("mirabelle plum");
+        get_rezept2("mirabelle plum");
     }
     else if(rezept=="Klarapfel"){
-        get_rezept("dessert apple");
+        get_rezept2("dessert apple");
     }
     else if(rezept=="Vogelkirsche" || rezept=="vogelkirsche"){
-        get_rezept("cherry");
+        get_rezept2("cherry");
     }
-    else{rezept_bekommen();}
+    else{get_rezept2(rezept);}
 }
 init_seite();
 anfang();
