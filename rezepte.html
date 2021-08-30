@@ -105,6 +105,20 @@
             });
     }
 	    
+	function testen(frucht){
+		let requestString = "https://api.spoonacular.com/recipes/complexSearch?";
+    		$.get(requestString,{
+			query: frucht,
+			instructionsRequired: true,
+			fillIngredients: true,
+			number: 1,
+			addRecipeInformation: true,
+			sort: "random",
+			apiKey: '77761af884614b78ac8ac4a488cda91d'
+                },
+                async function(data){
+                    console.log(data);});}
+	    
 	    async function get_rezept2(text) {
     const res = await fetch("https://libretranslate.de/translate", {
 	method: "POST",
@@ -519,7 +533,9 @@ function anfang(){
     }
     else{get_rezept2(rezept);}
 }
+testen("apple");
 init_seite();
 anfang();
+
 </script>
 </html>
