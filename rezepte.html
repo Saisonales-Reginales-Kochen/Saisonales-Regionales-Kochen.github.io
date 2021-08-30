@@ -105,213 +105,6 @@
                 $(this).addClass('active');
             });
     }
-	    
-	function testen(frucht){
-		let requestString = "https://api.spoonacular.com/recipes/complexSearch?";
-    		$.get(requestString,{
-			query: frucht,
-			instructionsRequired: true,
-			fillIngredients: true,
-			number: 1,
-			addRecipeInformation: true,
-			sort: "random",
-			apiKey: '77761af884614b78ac8ac4a488cda91d'
-                },
-                async function(data){
-                    console.log(data);});}
-	    
-	    async function get_rezept2(text) {
-    const res = await fetch("https://libretranslate.de/translate", {
-	method: "POST",
-	body: JSON.stringify({
-		q: text,
-		source: "de",
-		target: "en"
-	}),
-	headers: { "Content-Type": "application/json" }
-	});
-	var reser = await res.json();
-    var frucht = reser.translatedText;
-    console.log(frucht);
-    let requestString = "https://api.spoonacular.com/recipes/complexSearch?";
-    $.get(requestString,{
-                query: frucht,
-                instructionsRequired: true,
-                fillIngredients: true,
-                number: 1,
-                addRecipeInformation: true,
-                sort: "random",
-                apiKey: '77761af884614b78ac8ac4a488cda91d'
-                },
-                async function(data){
-                    console.log(data);
-                    let requestString = "https://api.spoonacular.com//recipes/"+data.results[0].id+"/information?";
-                    $.get(requestString,{
-                    number: 1,
-                    apiKey: '77761af884614b78ac8ac4a488cda91d'
-                    },
-                        function(data1){
-                            console.log(data1.results);
-                        });
-                    console.log(data.results);
-                    console.log(data.results[0].id);
-                    console.log(data.results[0].title);
-                    console.log(data.results[0].image);
-                    console.log(data.results[0].extendedIngredients);
-                    console.log(data.results[0].analyzedInstructions);
-
-                    //bild & titel
-                    const res = await fetch("https://libretranslate.de/translate", {
-                    method: "POST",
-                    body: JSON.stringify({
-                        q: data.results[0].title,
-                        source: "en",
-                        target: "de"
-                    }),
-                    headers: { "Content-Type": "application/json" }
-                    });
-                    var reser = await res.json();
-                    var title = reser.translatedText;
-                    //document.getElementById("rezept").innerHTML = "<h3>"+data.results[0].title+"</h3><img src="+data.results[0].image+" alt='"+data.results[0].title+"'><br>";
-                    //document.getElementById("inhalt2").innerHTML = "<h3>"+title+"</h3><img src="+data.results[0].image+" alt='"+title+"'><br>";
-
-                    document.getElementById("rezept").innerHTML ='<div><div class="fancyboxIframe" >' +
-                                    '<a data-fancybox-type="iframe" aria-label="Rezept" class="fancyboxIframe" href="' + data.results[0].sourceUrl + '" target="_blank" ><img src="' + data.results[0].image + '" class="img-responsive thumbnail" alt="Rezept Bild"></a>' +
-                                    '</div>' +
-                                    '<div class=".fancyboxIframe2">' +
-                                        '<h3 class="Vtitle fancyboxIframe2"><a data-fancybox-type="iframe" class="fancyboxIframe2" href="' + data.results[0].sourceUrl + '" target="_blank">' + title + '</a></h3>'+
-                                    '</div>';
-                                    /*
-                                    <div  id="cTitle"><i>'+htlm_rezept_text+'</i></div></div>' +
-                                '<div class="clearfix"></div>';
-                                */
-
-                    //erklärung & zusammenfassung
-                    console.log(data.results[0].summary);
-                    const res2 = await fetch("https://libretranslate.de/translate", {
-                        method: "POST",
-                        body: JSON.stringify({
-                            q: data.results[0].summary,
-                            source: "en",
-                            target: "de"
-                        }),
-                        headers: { "Content-Type": "application/json" }
-                        });
-                        var reser = await res2.json();
-                        var summary = reser.translatedText;
-                    //document.getElementById("beschreibung").innerHTML = data.results[0].summary;
-                    //document.getElementById("beschreibung").innerHTML = summary;
-                    document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><b>Beschreibung</b><br><p>"+summary+"</p></div><br><br>";
-                    
-                    //rezeptzutaten & menge
-                    for (item in data.results[0].extendedIngredients){
-                        console.log(data.results[0].extendedIngredients[item].name);
-                        const res = await fetch("https://libretranslate.de/translate", {
-                        method: "POST",
-                        body: JSON.stringify({
-                            q: data.results[0].extendedIngredients[item].name,
-                            source: "en",
-                            target: "de"
-                        }),
-                        headers: { "Content-Type": "application/json" }
-                        });
-                        var reser = await res.json();
-                        var ingredient = reser.translatedText;
-                        //document.getElementById("tabelle_inhalt").innerHTML += "<li id='inhalt_"+item+"'>"+ data.results[0].extendedIngredients[item].name +"</li>";
-                        //document.getElementById("tabelle_inhalt").innerHTML += "<li id='inhalt_"+item+"'>"+ ingredient+"</li>";
-                        if(item == 0){
-                            document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><b>Zutaten</b><br><p><ul id='zutaten_'></ul></p></div>";
-                        }
-                        document.getElementById("zutaten_").innerHTML += "<li id='inhalt_"+item+"'>"+ ingredient+"</li>";
-                        
-                        console.log(data.results[0].extendedIngredients[item].amount+" "+data.results[0].extendedIngredients[item].unit);
-                        if(data.results[0].extendedIngredients[item].unit){
-                        const res3 = await fetch("https://libretranslate.de/translate", {
-                        method: "POST",
-                        body: JSON.stringify({
-                            q: data.results[0].extendedIngredients[item].unit,
-                            source: "en",
-                            target: "de"
-                        }),
-                        headers: { "Content-Type": "application/json" }
-                        });
-                        var reser = await res3.json();
-                        var einheit = reser.translatedText;
-                        //document.getElementById("inhalt_"+item).innerHTML += "  "+data.results[0].extendedIngredients[item].amount+" "+data.results[0].extendedIngredients[item].unit;
-                        document.getElementById("inhalt_"+item).innerHTML += "  "+data.results[0].extendedIngredients[item].amount+" "+einheit;
-                        }
-                        if(item == data.results[0].extendedIngredients.length-1){
-                            document.getElementById("rezept").innerHTML += "<br><br>";
-                        }
-                    }
-
-                     //werkzeug
-                     if(data.results[0].analyzedInstructions[0] != undefined){
-                     if(data.results[0].analyzedInstructions[0].steps[0].equipment != undefined){
-                        for (item in data.results[0].analyzedInstructions[0].steps[0].equipment){
-                            console.log(data.results[0].analyzedInstructions[0].steps[0].equipment[item].name);
-                            
-                            const res = await fetch("https://libretranslate.de/translate", {
-                            method: "POST",
-                            body: JSON.stringify({
-                                q: data.results[0].analyzedInstructions[0].steps[0].equipment[item].name,
-                                source: "en",
-                                target: "de"
-                            }),
-                            headers: { "Content-Type": "application/json" }
-                            });
-                            var reser = await res.json();
-                            var equipment = reser.translatedText;
-                            //document.getElementById("werkzeug").innerHTML += ", "+ data.results[0].analyzedInstructions[0].steps[0].equipment[item].name;
-                            if(item == 0){
-                                //document.getElementById("werkzeug").innerHTML += equipment;
-                                document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><b>Equipment</b><br></div>";
-                                document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><p id='werkzeug_'>"+equipment+"</p></div>";
-                            }
-                            else{
-                                //document.getElementById("werkzeug").innerHTML += ", "+ equipment;
-                                document.getElementById("werkzeug_").innerHTML += ", "+ equipment;
-                            }
-                            if(item == data.results[0].analyzedInstructions[0].steps[0].equipment.length-1){
-                                document.getElementById("rezept").innerHTML += "<br><br>";
-                            } 
-                        }
-                    }
-                    }
-
-                    //zubereitungsbeschreibung
-                    var stepzahl =0
-                    for (item in data.results[0].analyzedInstructions[0].steps){
-                        console.log(data.results[0].analyzedInstructions[0].steps[item].step);
-                        stepzahl +=1;
-                        const res = await fetch("https://libretranslate.de/translate", {
-                        method: "POST",
-                        body: JSON.stringify({
-                            q: data.results[0].analyzedInstructions[0].steps[item].step,
-                            source: "en",
-                            target: "de"
-                        }),
-                        headers: { "Content-Type": "application/json" }
-                        });
-                        var reser = await res.json();
-                        var step = reser.translatedText;
-                        //document.getElementById("schritte").innerHTML += "<p><b>"+ stepzahl +":</b> "+ data.results[0].analyzedInstructions[0].steps[item].step +"</p>";
-                        //document.getElementById("schritte").innerHTML += "<p><b>"+ stepzahl +":</b> "+ step +"</p>";
-                        if(item == 0){
-                            document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe' id='schritte_'><b>Zubereitung</b><br></div>";
-                        }
-                        document.getElementById("schritte_").innerHTML += "<p><b>"+ stepzahl +":</b> "+ step +"</p>";
-                        if(item == data.results[0].analyzedInstructions[0].steps.length-1){
-                            document.getElementById("rezept").innerHTML += "<br><br>";
-                        }
-                    }
-
-                    //document.getElementById("tabelle_inhalt").innerHTML ="";
-                    //document.getElementById("werkzeug").innerHTML ="";
-                    //document.getElementById("beschreibung").innerHTML ="";
-                    //document.getElementById("schritte").innerHTML ="";
-                });
-	}
 
     //intitialisierung der Seite
     function init_seite(){
@@ -481,8 +274,7 @@
 <script src="js/jquery.inview.min.js"></script>
 <script src="js/wow.min.js"></script>
 <script src="js/main.js"></script>
-<!--<script src="js/response_get.js"></script>
-<script src="js/ruckmelden.js"></script>-->
+<script src="js/response_get.js"></script>
 <script lang="javascript">
 //schauen welcher Parameter übergeben wird. Wichtig für die weiteren schritte.
 function anfang(){
@@ -504,35 +296,35 @@ function anfang(){
         }
     }
     else if(rezept=="B%C3%A4rlauch"){
-        get_rezept2("wild garlic");
+        get_rezept("wild garlic");
     }
     else if(rezept=="S%C3%BC%C3%9Fkirsche"){
-        get_rezept2("sweet cherry");
+        get_rezept("sweet cherry");
     }
     else if(rezept=="Wei%C3%9Fdorn"){
-        get_rezept2("haw");
+        get_rezept("haw");
     }
     else if(rezept=="Rote%20Johannisbeere"){
-        get_rezept2("Red currant");
+        get_rezept("Red currant");
     }
     else if(rezept=="Felsenbirne"){
-        get_rezept2("pear");
+        get_rezept("pear");
     }
 	
     else if(rezept=="Esskastanie"){
-        get_rezept2("Kastanien");
+        get_rezept("Kastanien");
 	
     }
     else if(rezept=="Mirabelle"){
-        get_rezept2("plum");
+        get_rezept("plum");
     }
     else if(rezept=="Klarapfel" || rezept== "Apfel"){
-        get_rezept2("apple");
+        get_rezept("apple");
     }
     else if(rezept=="Vogelkirsche" || rezept=="vogelkirsche" ||rezept=="Kornelkirsche" || rezept=="kornelkirsche"){
-        get_rezept2("cherry");
+        get_rezept("cherry");
     }
-    else{get_rezept2(rezept);}
+    else{get_rezept(rezept);}
 }
 testen("apple");
 init_seite();
