@@ -71,6 +71,10 @@
 	border-radius: 25px;
     	border: 2px solid #337ab721;
 	}
+	
+	#zutaten_ ul{
+	    padding-left: 0;	
+	}
 
     </style>
 	<script src="js/jquery.js"></script>
@@ -573,93 +577,57 @@ get_rezept2("Haselnuss");
     
     //schauen welcher Parameter übergeben wird. Wichtig für die weiteren schritte.
     /*
-    function anfang(){
-        rezept = getQueryVariable("r");
-        if(rezept != undefined){
-            rezept = jsUcfirst(rezept);
-        }
-        if (rezept == undefined){
-            if (tag != undefined){
-                daily(tag);
-                set_active();
-            }
-            else{
-                var doc_1 = '<input type="text" name="name" class="form-control" id="zutaten" placeholder="Geben Sie bitte die gewünschte Frucht für Ihre Rezeptsuche ein" required><br><button onclick="such_es()" type="submit" class="btn btn-primary">Suchen</button>';
-                document.getElementById("rezept").innerHTML = doc_1;
-                document.getElementById("inhalt2").innerHTML = "Rezeptsuche";
-                set_active();
-    
-            }
-        }
-        else if(rezept=="B%C3%A4rlauch"){
-            get_rezept("wild garlic");
-        }
-        else if(rezept=="S%C3%BC%C3%9Fkirsche"){
-            get_rezept("sweet cherry");
-        }
-        else if(rezept=="Wei%C3%9Fdorn"){
-            get_rezept("hawthorn");
-        }
-        else if(rezept=="Rote%20Johannisbeere"){
-            get_rezept("Redcurrant");
-        }
-        else if(rezept=="Felsenbirne"){
-            get_rezept("pear");
-        }
-        else if(rezept=="Kornelkirsche"){
-            get_rezept("Cornus mas");
-        }
-        else if(rezept=="Mirabelle"){
-            get_rezept("mirabelle plum");
-        }
-        else if(rezept=="Klarapfel"){
-            get_rezept("dessert apple");
-        }
-        else if(rezept=="Vogelkirsche" || rezept=="vogelkirsche"){
-            get_rezept("cherry");
-        }
-        else{rezept_bekommen();}
+function anfang(){
+    rezept = getQueryVariable("r");
+    if(rezept != undefined){
+        rezept = jsUcfirst(rezept);
     }
+    if (rezept == undefined){
+        if (tag != undefined){
+            daily(tag);
+            set_active();
+        }
+        else{
+            var doc_1 = '<input type="text" name="name" class="form-control" id="zutaten" placeholder="Geben Sie bitte die gewünschte Frucht für Ihre Rezeptsuche ein" required><br><button onclick="such_es()" type="submit" class="btn btn-primary">Suchen</button>';
+            document.getElementById("rezept").innerHTML = doc_1;
+            document.getElementById("inhalt2").innerHTML = "Rezeptsuche";
+            set_active();
+
+        }
+    }
+    else if(rezept=="B%C3%A4rlauch"){
+        get_rezept("wild garlic");
+    }
+    else if(rezept=="S%C3%BC%C3%9Fkirsche"){
+        get_rezept("sweet cherry");
+    }
+    else if(rezept=="Wei%C3%9Fdorn"){
+        get_rezept("haw");
+    }
+    else if(rezept=="Rote%20Johannisbeere"){
+        get_rezept("Red currant");
+    }
+    else if(rezept=="Felsenbirne"){
+        get_rezept("pear");
+    }
+	
+    else if(rezept=="Esskastanie"){
+        get_rezept("Kastanien");
+	
+    }
+    else if(rezept=="Mirabelle"){
+        get_rezept("plum");
+    }
+    else if(rezept=="Klarapfel" || rezept== "Apfel"){
+        get_rezept("apple");
+    }
+    else if(rezept=="Vogelkirsche" || rezept=="vogelkirsche" ||rezept=="Kornelkirsche" || rezept=="kornelkirsche"){
+        get_rezept("cherry");
+    }
+    else{get_rezept(rezept);}
+}
     init_seite();
     anfang();
     */
-    asyncCall("apple");
     </script>
     </html>
-    
-
-
-
-
-
-
-
-
-
-
-
-<!---
-
-<div class="">
- <p id="api_hier"></p>
- <div id="rezept"></div>
-
- <h3>Beschreibung</h3>
- <div id="beschreibung"></div>
- <br>
- <h3>Benötigte Geräte</h3>
- <div id="werkzeug"></div>
- <br>
- <h3>Benötigte Produkte</h3>
- <table id="tabelle_inhalt">
-     
- </table>
-<br>
-<h3>Anleitung</h3>
- <div id="schritte"></div>
-
-</div>
-
-</body>
-</html>
--->
