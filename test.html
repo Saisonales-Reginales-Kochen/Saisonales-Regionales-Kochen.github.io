@@ -1,122 +1,202 @@
 <!DOCTYPE html>
-<html lang="en">
-<meta charset="UTF-8">
-<title>Page Title</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="">
-<style>
-</style>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>Rezepte: Sesonal und Regional</title>
+	<!-- CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/owl.carousel.css" rel="stylesheet">
+    <link href="css/owl.transitions.css" rel="stylesheet">
+    <link href="css/prettyPhoto.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="images/ico/favicon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <style>
+    .fancyboxIframe{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+    .fancyboxIframe2{
+        text-align: center;
+    }
+
+        li {
+        display: block;
+        transition-duration: 0.5s;
+        }
+
+        li:hover {
+        cursor: pointer;
+        }
+
+        ul li ul {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        transition: all 0.5s ease;
+        margin-top: 1rem;
+        left: 0;
+        display: none;
+        }
+
+        ul li:hover > ul,
+        ul li ul:hover {
+        visibility: visible;
+        opacity: 1;
+        display: block;
+        }
+
+        ul li ul li {
+        clear: both;
+        width: 130%;
+        }
+	    
+	.img-responsive{
+	border-radius: 25px;
+    	border: 2px solid #337ab721;
+	}
+
+    </style>
+	<script src="js/jquery.js"></script>
+    <script lang="javascript">
+    /////get rezept_suchbegriff
+    var rezept = getQueryVariable("r");
+    var tag = getQueryVariable("t");
+        function getQueryVariable(variable){
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++)
+            {
+                var pair = vars[i].split("=");
+                if(pair[0] == variable)
+                {
+                    return pair[1];
+                    }
+                }
+        }
+        console.log(rezept);
+
+    // To Upper case
+    function jsUcfirst(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+    //activ setzen der navigations bar
+    function set_active(){
+        $('li').click(function(e) {
+                e.preventDefault();
+                $('li').removeClass('active');
+                $(this).addClass('active');
+            });
+    }
+
+    //intitialisierung der Seite
+    function init_seite(){
+        if(rezept != undefined){
+            document.getElementById('rgfuellt').className = "scoll active";
+            document.getElementById('tgfuellt').className = "scoll";
+        }
+        if(tag != undefined){
+            document.getElementById('tgfuellt').className = "scoll active";
+            document.getElementById('rgfuellt').className = "scoll";
+        }
+    }
+
+    function linken(){location.href = "rezepte.html"; set_active();}
+
+    function home(par){location.href = "index.html"+par}
+
+    // Die Rezepte für Daily Cooking werden hier geladen
+    function daily(tag){
+        var doc_1 = '';
+        if(tag == 'montag'){
+            doc_1 ='<div class="fancyboxIframe wow fadeInDown"><img class="img-responsive" src="images/rezepte/montag.jpg" alt=""></div> \
+                    <div class="text-center wow fadeInDown"><h3><a href ="rezepte.html?t=montag">Kürbissuppe</a></h3>\
+                    <div class="zutaten"><i>Zutaten:<br>1kg Kürbis<br>2 Zwiebeln<br>2EL Butter<br>2EL Mehl<br>800ml Gemüsebrühe<br>200g Schlagsahne<br>Gewürze: Salz, Pfeffer, Muskatnuss nach Geschmack<br></i><br>\
+                    <div class="auflisten"><b>1.</b> Zwiebeln & Kürbis schälen und entkernen.<br><b>2.</b> Zwiebeln in der Butter glasig dünsten, danach den Kürbis und Mehl hinzugeben und weiter anschwitzen.<br><b>3.</b> Anschließend die Brühe, die Sahne sowie die Gewürze hinzugeben und 25 Min. köcheln lassen.<br><b>4.</b> Jetzt die Kürbissuppe pürieren und evt. nochmal abschmecken. Dazu ein Topping oder frisches Brot vom Bäcker.</div><br>Wir wünschen guten Appetit!</div></div>';
+        }
+
+        if(tag == 'dienstag'){
+            doc_1 ='<div class="fancyboxIframe wow fadeInDown"><img class="img-responsive" src="images/rezepte/dienstag.jpg" alt=""></div> \
+                    <div class="text-center wow fadeInDown"><h3><a href ="rezepte.html?t=dienstag">Sorbet</a></h3>\
+                    <div class="zutaten"><i>Zutaten:<br>550g reife Früchte (z.B. Aprikosen)<br>100g Zucker<br>4EL Zitronensaft<br>2EL Schnaps oder Likör (passend zur verwendeten Frucht)<br>50g Invertzucker<br></i><br>\
+                    <div class="auflisten"><b>1.</b> Früchte schälen und entkernen.<br><b>2.</b> Anschließend die Früchte mit Zucker und Zitronensaft in einem Topf 5 Min. aufkochen.<br><b>3.</b> Die Früchte pürieren und für eine Std. in den Kühlschrank stellen.<br><b>4.</b> Jetzt die Masse mit Invertzucker und Schnaps/Likör mischen und für 50 Min. in der Eismaschine cremig erhärten lassen.</div><br>Wir wünschen guten Appetit!</div></div>';
+        }
+
+        if(tag == 'mittwoch'){
+            doc_1 ='<div class="fancyboxIframe wow fadeInDown"><img class="img-responsive" src="images/rezepte/mittwoch.jpg" alt=""></div> \
+                    <div class="text-center wow fadeInDown"><h3><a href ="rezepte.html?t=mittwoch">Nussecken</a></h3>\
+                    <div class="zutaten"><i>Zutaten:<br>Für den Teig:<br>225g Mehl<br>1TL Backpulver<br>100g Zucker<br>1 Pck. Vanillezucker<br>1 Ei<br>2EL Wasser<br>100g Butter<br>Für den Belag:<br>150g Butter<br>150g Zucker<br>2 Pck. Vanillezucker<br>3EL Wasser<br>100g Haselnüsse gemahlen<br>200g Hasselnüsse gehobelt<br>3EL Konfitüre<br>100g Zartbitterschokolade<br></i><br>\
+                    <div class="auflisten"><b>1.</b> Alle Zutaten für den Teig in einer Schüssel mit einem Handmixer verrühren.<br><b>2.</b> Die Masse zu einer Rolle formen und für 30 Min. in den Kühlschrank legen.<br><b>3.</b> Für den Belag Butter mit Zucker, Vanillezucker und Wasser in einem Topf schmelzen. Gemahlene und gehobelte Hasselnüsse unterrühren und die Masse anschließend etwa 10 Min. ruhen lassen.<br><b>4.</b> Den Teig ausrollen, mit Konfitüre bestreichen und die Haselnussmasse darauf verteilen. Die Nussecken brauchen ca. 25 Min. bei 180°C im Backofen.<br><b>5.</b> Nach dem Backen die Nussecken erkalten lassen und mit Zartbitterschokolade verzieren. Die fertigen Nussecken können mit einem frischen Tee oder Kaffee serviert werden.</div><br>Wir wünschen guten Appetit!</div></div>';
+        }
+
+        if(tag == 'donnerstag'){
+            doc_1 ='<div class="fancyboxIframe wow fadeInDown"><img class="img-responsive" src="images/rezepte/donnerstag.jpg" alt=""></div> \
+                    <div class="text-center wow fadeInDown"><h3><a href ="rezepte.html?t=donnerstag">Saisonaler Salat</a></h3>\
+                    <div class="zutaten"><i>Zutaten:<br>2 Tomaten<br>1 Gurke<br>300g Feld- oder Kopfsalat<br>1 Karotte<br>100g Endivie<br>2 Stangen Fühlingszwiebel<br>Dressing:<br>200ml Joghurt<br>20g Petersilie<br>20g Dill<br>Gewürze: Salz, Pfeffer<br></i><br>\
+                    <div class="auflisten"><b>1.</b> Alle Zutaten waschen, schälen (falls nötig) und zuschneiden.<br><b>2.</b> Die Zutaten in eine Schüssel geben und leicht vermischen.<br><b>3.</b> Den Dill und die Petersilie fein hacken und mit dem Joghurt und den Gewürzen zu einem Dressing anrühren.<br><b>4.</b> Das Dressing über den Salat kippen und sofort servieren. Weitere Toppings sind natürlich immer möglich.</div><br>Wir wünschen guten Appetit!</div></div>';
+        }
+
+        if(tag == 'freitag'){
+            doc_1 ='<div class="fancyboxIframe wow fadeInDown"><img class="img-responsive" src="images/rezepte/freitag.jpg" alt=""></div> \
+                    <div class="text-center wow fadeInDown"><h3><a href ="rezepte.html?t=freitag">Bratfisch</a></h3>\
+                    <div class="zutaten"><i>Zutaten:<br>2 Fisch-Filets (zb. Zander)<br>50g Mehl<br>1 Ei (optinoal)<br>300g junge Kartoffeln<br>100ml Öl<br>Gewürze: Salz, Pfeffer, Rosmarin<br></i><br>\
+                    <div class="auflisten"><b>1.</b> Das Mehl würzen und die Filets mit diesem bedecken. Falls gewünscht, die Filets voher in Ei tauchen<br><b>2.</b> Die Kartoffeln mit Öl, Rosmarin und Salz bestreuen und bei 200°C ca. 20 Min. backen.<br><b>3.</b> Den Fisch in eine heiße Pfanne mit Öl geben und goldbraun braten.<br><b>4.</b> Den Fisch mit den Kartoffeln anrichten. Dazu passen Zitronen und ein leckerer Kräuterquark.</div><br>Wir wünschen guten Appetit!</div></div>';
+        }
+
+        if(tag == 'samstag'){
+            doc_1 ='<div class="fancyboxIframe wow fadeInDown"><img class="img-responsive" src="images/rezepte/samstag.jpg" alt=""></div> \
+                    <div class="text-center wow fadeInDown"><h3><a href ="rezepte.html?t=samstag">Himbeer Cocktail</a></h3>\
+                    <div class="zutaten"><i>Zutaten:<br>7 Himbeeren<br>6cl Gin<br>3cl Zuckersirup<br>30ml Limetten-Saft<br>Eiswürzel<br></i><br>\
+                    <div class="auflisten"><b>1.</b> Die Himbeeren zerkleinern und die Limetten auspressen.<br><b>2.</b> Die Zutaten mischen, in Gläser füllen und mit Eiswürfeln auffüllen.<br><b>3.</b> Das Ganze mit frischen Himbeeren, Minze und Limettenscheiben verzieren.</div><br>Wir wünschen guten Appetit!</div></div>';
+        }
+
+        if(tag == 'sonntag'){
+            doc_1 ='<div class="fancyboxIframe wow fadeInDown"><img class="img-responsive" src="images/rezepte/sonntag.jpg" alt=""></div> \
+                    <div class="text-center wow fadeInDown"><h3><a href ="rezepte.html?t=sonntag">Zitronenhähnchen</a></h3>\
+                    <div class="zutaten"><i>Zutaten:<br>400g Hähnchenbrust<br>5EL Zitronensaft<br>100ml Weißwein<br>3EL Butter<br>100ml Gemüsebrühe<br>1EL Zucker<br>2 Schalotten<br>Gewürze: Salz, Pfeffer, Zitronengras, Basilikum, evt. Chili<br></i><br>\
+                    <div class="auflisten"><b>1.</b> Zwiebeln schälen und Zitronen pressen.<br><b>2.</b> Zwiebeln in der Butter glasig dünsten. Danach mit Brühe, Zitronensaft und Wein aufgießen und mit Gewürzen und Zucker abschmecken.<br><b>3.</b> Anschließend das Hähnchen in die Soße legen und 15 Min. köcheln lassen.<br><b>4.</b> Das Hähnchen mit der Soße anrichten und frischen Basilikum darüber verteilen. Dazu frisches Brot vom Bäcker oder selbstgemachte Bratkartoffeln.</div><br>Wir wünschen guten Appetit!</div></div>';
+        }
+
+        document.getElementById("rezept").innerHTML = doc_1;
+        document.getElementById("inhalt2").innerHTML = jsUcfirst(tag);
+    }
+
+    //js Funktion wird abgerufen um den Übersetzer zu verwenden
+    function rezept_bekommen(){
+        trans(rezept);
+    };
+
+    //suchfunktion
+    function such_es(){
+        var zutat = document.getElementById("zutaten").value;
+        console.log(zutat);
+        if (zutat == ""){return};
+        zutat = zutat.toLowerCase();
+        location.href = "rezepte.html?r="+zutat;
+    };
+
+    </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    /*
-	function get_rezept(frucht){
-    var r_id;
-    var rezept_text;
-    var img_url;
-    var min=1; 
-    var max=5;  
-    var zufall = Math.floor(Math.random() * (+max - +min)) + +min;
-    var htlm_rezept_text;
-            //API Food2Fork get id
-            $.get(
-                'https://www.food2fork.com/api/search',{
-                q: frucht,
-                count: 1,
-                page: zufall,
-                sort: 'r',
-                key: 'Hier ein gültiger Schlüssel'
-                },
-                function(data){
-                    var output; 
-                    output = data.slice(data.search(/recipe_id":/) , data.search(/, "image_url"/));
-                    r_id = output.slice(13,-1);
-
-                    //API Food2Fork get recipe
-                    $.get(
-                    'https://www.food2fork.com/api/get',{
-                    rId: r_id,
-                    key: 'Hier ein gültiger Schlüssel'
-                    },
-                    function(data2){
-                        rezept_text = data2.slice(data2.search(/"ingredients":/), data2.search(/, "source_url":/));
-                        rezept_text = rezept_text.concat(" "+data2.slice(data2.search(/"title":/), ));
-                        img_url = data2.slice(data2.search(/image_url":/), data2.search(/", "social_rank":/));
-                        img_url = img_url.slice(13,);
-                        
-                        // yandex trans api
-						const res = await fetch("https://libretranslate.de/translate", {
-						method: "POST",
-						body: JSON.stringify({
-							q: rezept_text,
-							source: "en",
-							target: "de"
-						}),
-						headers: { "Content-Type": "application/json" }
-						});
-						var reser = await res.json();
-                                var string_data3 = JSON.stringify(reser.translatedText);
-                                string_data3 = '"'+string_data3+'"';
-                                var titel; 
-                                titel= string_data3.slice(string_data3.search(/Titel/),);
-                                titel = titel.slice(11, -8);
-                                var rezept_text; 
-                                rezept_text = string_data3.slice(string_data3.search(/"Zutaten/), string_data3.search(/"Titel/));
-                                rezept_text = "'"+rezept_text+"'";
-                                rezept_text = rezept_text.replace('[', '');
-                                rezept_text = rezept_text.replace(']', '');
-                                rezept_text = rezept_text.replace(/\\/g, '');
-                                rezept_text = rezept_text.split(/", /);
-                                var i;
-                                for (i = 0; i < rezept_text.length; i++) {
-                                  htlm_rezept_text += rezept_text[i] + "<br>";
-                                }
-                                htlm_rezept_text = htlm_rezept_text.replace('undefined', '');
-                                htlm_rezept_text = htlm_rezept_text.replace(/"/g, '');
-                                htlm_rezept_text = htlm_rezept_text.replace("'Zutaten:","<b>Zutaten:</b> <br>");
-                                htlm_rezept_text = htlm_rezept_text.replace(/'/, '');
-                                htlm_rezept_text = htlm_rezept_text.replace(/ n /, '');
-                                output = '<div><div class="fancyboxIframe" >' +
-                                    '<a data-fancybox-type="iframe" class="fancyboxIframe" href="http://food2fork.com/view/' + r_id + '" target="_blank" ><img src="' + img_url + '" class="img-responsive thumbnail" ></a>' +
-                                    '</div>' +
-                                    '<div class=".fancyboxIframe2">' +
-                                        '<h3 class="Vtitle fancyboxIframe2"><a data-fancybox-type="iframe" class="fancyboxIframe2" href="http://food2fork.com/view/' + r_id + '" target="_blank">' + titel + '</a></h3>'+
-                                    '</div><div  id="cTitle"><i>'+htlm_rezept_text+'</i></div></div>' +
-                                '<div class="clearfix"></div>';
-                      //nachdem man alles erhalten hat wird es jetzt in die html geldaen
-                      $('#rezept').append(output);
-                                });
-                        });
-            }
-            */
-
-/*
-    async function asyncCall(text, input_lang, output_lang) {
-    const res = await fetch("https://libretranslate.de/translate", {
-	method: "POST",
-	body: JSON.stringify({
-		q: text,
-		source: input_lang,
-		target: output_lang
-	}),
-	headers: { "Content-Type": "application/json" }
-	});
-	//console.log(await res.json());
-	var reser = await res.json();
-    get_rezept(reser.translatedText);
-	//console.log(await reser.translatedText);
-	document.getElementById("api_hier").innerHTML = reser.translatedText;
-	//return await reser.translatedText;
-	}
-*/
-
-
-    //asyncCall("Welcome!!!", "en", "de");
-    //console.log(asyncCall("Welcome!!!", "de", "en"));
-
+	
 var _0xea1e=["\x68\x74\x74\x70\x73\x3A\x2F\x2F\x6C\x69\x62\x72\x65\x74\x72\x61\x6E\x73\x6C\x61\x74\x65\x2E\x64\x65\x2F\x74\x72\x61\x6E\x73\x6C\x61\x74\x65","\x50\x4F\x53\x54","\x64\x65","\x65\x6E","\x73\x74\x72\x69\x6E\x67\x69\x66\x79","\x61\x70\x70\x6C\x69\x63\x61\x74\x69\x6F\x6E\x2F\x6A\x73\x6F\x6E","\x6A\x73\x6F\x6E","\x74\x72\x61\x6E\x73\x6C\x61\x74\x65\x64\x54\x65\x78\x74","\x68\x74\x74\x70\x73\x3A\x2F\x2F\x61\x70\x69\x2E\x73\x70\x6F\x6F\x6E\x61\x63\x75\x6C\x61\x72\x2E\x63\x6F\x6D\x2F\x72\x65\x63\x69\x70\x65\x73\x2F\x63\x6F\x6D\x70\x6C\x65\x78\x53\x65\x61\x72\x63\x68\x3F","\x72\x61\x6E\x64\x6F\x6D","\x37\x37\x37\x36\x31\x61\x66\x38\x38\x34\x36\x31\x34\x62\x37\x38\x61\x63\x38\x61\x63\x34\x61\x34\x38\x38\x63\x64\x61\x39\x31\x64","\x68\x74\x74\x70\x73\x3A\x2F\x2F\x61\x70\x69\x2E\x73\x70\x6F\x6F\x6E\x61\x63\x75\x6C\x61\x72\x2E\x63\x6F\x6D\x2F\x2F\x72\x65\x63\x69\x70\x65\x73\x2F","\x69\x64","\x72\x65\x73\x75\x6C\x74\x73","\x2F\x69\x6E\x66\x6F\x72\x6D\x61\x74\x69\x6F\x6E\x3F","\x6C\x6F\x67","\x67\x65\x74","\x74\x69\x74\x6C\x65","\x69\x6E\x6E\x65\x72\x48\x54\x4D\x4C","\x72\x65\x7A\x65\x70\x74","\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x3C\x64\x69\x76\x3E\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x22\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x22\x20\x3E","\x3C\x61\x20\x64\x61\x74\x61\x2D\x66\x61\x6E\x63\x79\x62\x6F\x78\x2D\x74\x79\x70\x65\x3D\x22\x69\x66\x72\x61\x6D\x65\x22\x20\x61\x72\x69\x61\x2D\x6C\x61\x62\x65\x6C\x3D\x22\x52\x65\x7A\x65\x70\x74\x22\x20\x63\x6C\x61\x73\x73\x3D\x22\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x22\x20\x68\x72\x65\x66\x3D\x22","\x73\x6F\x75\x72\x63\x65\x55\x72\x6C","\x22\x20\x74\x61\x72\x67\x65\x74\x3D\x22\x5F\x62\x6C\x61\x6E\x6B\x22\x20\x3E\x3C\x69\x6D\x67\x20\x73\x72\x63\x3D\x22","\x69\x6D\x61\x67\x65","\x22\x20\x63\x6C\x61\x73\x73\x3D\x22\x69\x6D\x67\x2D\x72\x65\x73\x70\x6F\x6E\x73\x69\x76\x65\x20\x74\x68\x75\x6D\x62\x6E\x61\x69\x6C\x22\x20\x61\x6C\x74\x3D\x22\x52\x65\x7A\x65\x70\x74\x20\x42\x69\x6C\x64\x22\x3E\x3C\x2F\x61\x3E","\x3C\x2F\x64\x69\x76\x3E","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x22\x2E\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x32\x22\x3E","\x3C\x68\x33\x20\x63\x6C\x61\x73\x73\x3D\x22\x56\x74\x69\x74\x6C\x65\x20\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x32\x22\x3E\x3C\x61\x20\x64\x61\x74\x61\x2D\x66\x61\x6E\x63\x79\x62\x6F\x78\x2D\x74\x79\x70\x65\x3D\x22\x69\x66\x72\x61\x6D\x65\x22\x20\x63\x6C\x61\x73\x73\x3D\x22\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x32\x22\x20\x68\x72\x65\x66\x3D\x22","\x22\x20\x74\x61\x72\x67\x65\x74\x3D\x22\x5F\x62\x6C\x61\x6E\x6B\x22\x3E","\x3C\x2F\x61\x3E\x3C\x2F\x68\x33\x3E","\x73\x75\x6D\x6D\x61\x72\x79","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x3E\x3C\x62\x3E\x42\x65\x73\x63\x68\x72\x65\x69\x62\x75\x6E\x67\x3C\x2F\x62\x3E\x3C\x62\x72\x3E\x3C\x70\x3E","\x3C\x2F\x70\x3E\x3C\x2F\x64\x69\x76\x3E\x3C\x62\x72\x3E\x3C\x62\x72\x3E","\x65\x78\x74\x65\x6E\x64\x65\x64\x49\x6E\x67\x72\x65\x64\x69\x65\x6E\x74\x73","\x6E\x61\x6D\x65","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x3E\x3C\x62\x3E\x5A\x75\x74\x61\x74\x65\x6E\x3C\x2F\x62\x3E\x3C\x62\x72\x3E\x3C\x70\x3E\x3C\x75\x6C\x20\x69\x64\x3D\x27\x7A\x75\x74\x61\x74\x65\x6E\x5F\x27\x3E\x3C\x2F\x75\x6C\x3E\x3C\x2F\x70\x3E\x3C\x2F\x64\x69\x76\x3E","\x7A\x75\x74\x61\x74\x65\x6E\x5F","\x3C\x6C\x69\x20\x69\x64\x3D\x27\x69\x6E\x68\x61\x6C\x74\x5F","\x27\x3E","\x3C\x2F\x6C\x69\x3E","\x75\x6E\x69\x74","\x69\x6E\x68\x61\x6C\x74\x5F","\x20\x20","\x61\x6D\x6F\x75\x6E\x74","\x20","\x6C\x65\x6E\x67\x74\x68","\x3C\x62\x72\x3E\x3C\x62\x72\x3E","\x65\x71\x75\x69\x70\x6D\x65\x6E\x74","\x73\x74\x65\x70\x73","\x61\x6E\x61\x6C\x79\x7A\x65\x64\x49\x6E\x73\x74\x72\x75\x63\x74\x69\x6F\x6E\x73","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x3E\x3C\x62\x3E\x45\x71\x75\x69\x70\x6D\x65\x6E\x74\x3C\x2F\x62\x3E\x3C\x62\x72\x3E\x3C\x2F\x64\x69\x76\x3E","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x3E\x3C\x70\x20\x69\x64\x3D\x27\x77\x65\x72\x6B\x7A\x65\x75\x67\x5F\x27\x3E","\x3C\x2F\x70\x3E\x3C\x2F\x64\x69\x76\x3E","\x77\x65\x72\x6B\x7A\x65\x75\x67\x5F","\x2C\x20","\x73\x74\x65\x70","\x3C\x64\x69\x76\x20\x63\x6C\x61\x73\x73\x3D\x27\x66\x61\x6E\x63\x79\x62\x6F\x78\x49\x66\x72\x61\x6D\x65\x27\x20\x69\x64\x3D\x27\x73\x63\x68\x72\x69\x74\x74\x65\x5F\x27\x3E\x3C\x62\x3E\x5A\x75\x62\x65\x72\x65\x69\x74\x75\x6E\x67\x3C\x2F\x62\x3E\x3C\x62\x72\x3E\x3C\x2F\x64\x69\x76\x3E","\x73\x63\x68\x72\x69\x74\x74\x65\x5F","\x3C\x70\x3E\x3C\x62\x3E","\x3A\x3C\x2F\x62\x3E\x20","\x3C\x2F\x70\x3E"];async function get_rezept2(_0xdd00x2){const _0xdd00x3= await fetch(_0xea1e[0],{method:_0xea1e[1],body:JSON[_0xea1e[4]]({q:_0xdd00x2,source:_0xea1e[2],target:_0xea1e[3]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xea1e[5]}});var _0xdd00x4= await _0xdd00x3[_0xea1e[6]]();var _0xdd00x5=_0xdd00x4[_0xea1e[7]];let _0xdd00x6=_0xea1e[8];$[_0xea1e[16]](_0xdd00x6,{query:_0xdd00x5,instructionsRequired:true,fillIngredients:true,number:1,addRecipeInformation:true,sort:_0xea1e[9],apiKey:_0xea1e[10]},async function(_0xdd00x7){let _0xdd00x6=_0xea1e[11]+ _0xdd00x7[_0xea1e[13]][0][_0xea1e[12]]+ _0xea1e[14];$[_0xea1e[16]](_0xdd00x6,{number:1,apiKey:_0xea1e[10]},function(_0xdd00x8){console[_0xea1e[15]](_0xdd00x8[_0xea1e[13]])});console[_0xea1e[15]](_0xdd00x7[_0xea1e[13]][0]);const _0xdd00x3= await fetch(_0xea1e[0],{method:_0xea1e[1],body:JSON[_0xea1e[4]]({q:_0xdd00x7[_0xea1e[13]][0][_0xea1e[17]],source:_0xea1e[3],target:_0xea1e[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xea1e[5]}});var _0xdd00x4= await _0xdd00x3[_0xea1e[6]]();var _0xdd00x9=_0xdd00x4[_0xea1e[7]];document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]= _0xea1e[21]+ _0xea1e[22]+ _0xdd00x7[_0xea1e[13]][0][_0xea1e[23]]+ _0xea1e[24]+ _0xdd00x7[_0xea1e[13]][0][_0xea1e[25]]+ _0xea1e[26]+ _0xea1e[27]+ _0xea1e[28]+ _0xea1e[29]+ _0xdd00x7[_0xea1e[13]][0][_0xea1e[23]]+ _0xea1e[30]+ _0xdd00x9+ _0xea1e[31]+ _0xea1e[27];const _0xdd00xa= await fetch(_0xea1e[0],{method:_0xea1e[1],body:JSON[_0xea1e[4]]({q:_0xdd00x7[_0xea1e[13]][0][_0xea1e[32]],source:_0xea1e[3],target:_0xea1e[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xea1e[5]}});var _0xdd00x4= await _0xdd00xa[_0xea1e[6]]();var _0xdd00xb=_0xdd00x4[_0xea1e[7]];document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]+= _0xea1e[33]+ _0xdd00xb+ _0xea1e[34];for(item in _0xdd00x7[_0xea1e[13]][0][_0xea1e[35]]){const _0xdd00x3= await fetch(_0xea1e[0],{method:_0xea1e[1],body:JSON[_0xea1e[4]]({q:_0xdd00x7[_0xea1e[13]][0][_0xea1e[35]][item][_0xea1e[36]],source:_0xea1e[3],target:_0xea1e[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xea1e[5]}});var _0xdd00x4= await _0xdd00x3[_0xea1e[6]]();var _0xdd00xc=_0xdd00x4[_0xea1e[7]];if(item== 0){document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]+= _0xea1e[37]};document[_0xea1e[20]](_0xea1e[38])[_0xea1e[18]]+= _0xea1e[39]+ item+ _0xea1e[40]+ _0xdd00xc+ _0xea1e[41];if(_0xdd00x7[_0xea1e[13]][0][_0xea1e[35]][item][_0xea1e[42]]){const _0xdd00xd= await fetch(_0xea1e[0],{method:_0xea1e[1],body:JSON[_0xea1e[4]]({q:_0xdd00x7[_0xea1e[13]][0][_0xea1e[35]][item][_0xea1e[42]],source:_0xea1e[3],target:_0xea1e[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xea1e[5]}});var _0xdd00x4= await _0xdd00xd[_0xea1e[6]]();var _0xdd00xe=_0xdd00x4[_0xea1e[7]];document[_0xea1e[20]](_0xea1e[43]+ item)[_0xea1e[18]]+= _0xea1e[44]+ _0xdd00x7[_0xea1e[13]][0][_0xea1e[35]][item][_0xea1e[45]]+ _0xea1e[46]+ _0xdd00xe};if(item== _0xdd00x7[_0xea1e[13]][0][_0xea1e[35]][_0xea1e[47]]- 1){document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]+= _0xea1e[48]}};for(item in _0xdd00x7[_0xea1e[13]][0][_0xea1e[51]][0][_0xea1e[50]][0][_0xea1e[49]]){const _0xdd00x3= await fetch(_0xea1e[0],{method:_0xea1e[1],body:JSON[_0xea1e[4]]({q:_0xdd00x7[_0xea1e[13]][0][_0xea1e[51]][0][_0xea1e[50]][0][_0xea1e[49]][item][_0xea1e[36]],source:_0xea1e[3],target:_0xea1e[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xea1e[5]}});var _0xdd00x4= await _0xdd00x3[_0xea1e[6]]();var _0xdd00xf=_0xdd00x4[_0xea1e[7]];if(item== 0){document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]+= _0xea1e[52];document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]+= _0xea1e[53]+ _0xdd00xf+ _0xea1e[54]}else {document[_0xea1e[20]](_0xea1e[55])[_0xea1e[18]]+= _0xea1e[56]+ _0xdd00xf};if(item== _0xdd00x7[_0xea1e[13]][0][_0xea1e[51]][0][_0xea1e[50]][0][_0xea1e[49]][_0xea1e[47]]- 1){document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]+= _0xea1e[48]}};var _0xdd00x10=0;for(item in _0xdd00x7[_0xea1e[13]][0][_0xea1e[51]][0][_0xea1e[50]]){_0xdd00x10+= 1;const _0xdd00x3= await fetch(_0xea1e[0],{method:_0xea1e[1],body:JSON[_0xea1e[4]]({q:_0xdd00x7[_0xea1e[13]][0][_0xea1e[51]][0][_0xea1e[50]][item][_0xea1e[57]],source:_0xea1e[3],target:_0xea1e[2]}),headers:{"\x43\x6F\x6E\x74\x65\x6E\x74\x2D\x54\x79\x70\x65":_0xea1e[5]}});var _0xdd00x4= await _0xdd00x3[_0xea1e[6]]();var _0xdd00x11=_0xdd00x4[_0xea1e[7]];if(item== 0){document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]+= _0xea1e[58]};document[_0xea1e[20]](_0xea1e[59])[_0xea1e[18]]+= _0xea1e[60]+ _0xdd00x10+ _0xea1e[61]+ _0xdd00x11+ _0xea1e[62];if(item== _0xdd00x7[_0xea1e[13]][0][_0xea1e[51]][0][_0xea1e[50]][_0xea1e[47]]- 1){document[_0xea1e[20]](_0xea1e[19])[_0xea1e[18]]+= _0xea1e[48]}}})}
-
-
-
 
 async function get_rezept(text) {
     const res = await fetch("https://libretranslate.de/translate", {
@@ -170,8 +250,6 @@ async function get_rezept(text) {
                     });
                     var reser = await res.json();
                     var title = reser.translatedText;
-                    //document.getElementById("rezept").innerHTML = "<h3>"+data.results[0].title+"</h3><img src="+data.results[0].image+" alt='"+data.results[0].title+"'><br>";
-                    //document.getElementById("inhalt2").innerHTML = "<h3>"+title+"</h3><img src="+data.results[0].image+" alt='"+title+"'><br>";
 
                     document.getElementById("rezept").innerHTML ='<div><div class="fancyboxIframe" >' +
                                     '<a data-fancybox-type="iframe" aria-label="Rezept" class="fancyboxIframe" href="' + data.results[0].sourceUrl + '" target="_blank" ><img src="' + data.results[0].image + '" class="img-responsive thumbnail" alt="Rezept Bild"></a>' +
@@ -179,10 +257,6 @@ async function get_rezept(text) {
                                     '<div class=".fancyboxIframe2">' +
                                         '<h3 class="Vtitle fancyboxIframe2"><a data-fancybox-type="iframe" class="fancyboxIframe2" href="' + data.results[0].sourceUrl + '" target="_blank">' + title + '</a></h3>'+
                                     '</div>';
-                                    /*
-                                    <div  id="cTitle"><i>'+htlm_rezept_text+'</i></div></div>' +
-                                '<div class="clearfix"></div>';
-                                */
 
                     //erklärung & zusammenfassung
                     console.log(data.results[0].summary);
@@ -196,9 +270,7 @@ async function get_rezept(text) {
                         headers: { "Content-Type": "application/json" }
                         });
                         var reser = await res2.json();
-                        var summary = reser.translatedText;
-                    //document.getElementById("beschreibung").innerHTML = data.results[0].summary;
-                    //document.getElementById("beschreibung").innerHTML = summary;
+                        var summary = reser.translatedText;;
                     document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><b>Beschreibung</b><br><p>"+summary+"</p></div><br><br>";
                     
                     //rezeptzutaten & menge
@@ -260,14 +332,11 @@ async function get_rezept(text) {
                             });
                             var reser = await res.json();
                             var equipment = reser.translatedText;
-                            //document.getElementById("werkzeug").innerHTML += ", "+ data.results[0].analyzedInstructions[0].steps[0].equipment[item].name;
                             if(item == 0){
-                                //document.getElementById("werkzeug").innerHTML += equipment;
                                 document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><b>Equipment</b><br></div>";
                                 document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe'><p id='werkzeug_'>"+equipment+"</p></div>";
                             }
                             else{
-                                //document.getElementById("werkzeug").innerHTML += ", "+ equipment;
                                 document.getElementById("werkzeug_").innerHTML += ", "+ equipment;
                             }
                             if(item == data.results[0].analyzedInstructions[0].steps[0].equipment.length-1){
@@ -293,8 +362,6 @@ async function get_rezept(text) {
                         });
                         var reser = await res.json();
                         var step = reser.translatedText;
-                        //document.getElementById("schritte").innerHTML += "<p><b>"+ stepzahl +":</b> "+ data.results[0].analyzedInstructions[0].steps[item].step +"</p>";
-                        //document.getElementById("schritte").innerHTML += "<p><b>"+ stepzahl +":</b> "+ step +"</p>";
                         if(item == 0){
                             document.getElementById("rezept").innerHTML += "<div class='fancyboxIframe' id='schritte_'><b>Zubereitung</b><br></div>";
                         }
@@ -303,130 +370,16 @@ async function get_rezept(text) {
                             document.getElementById("rezept").innerHTML += "<br><br>";
                         }
                     }
-
-                    //document.getElementById("tabelle_inhalt").innerHTML ="";
-                    //document.getElementById("werkzeug").innerHTML ="";
-                    //document.getElementById("beschreibung").innerHTML ="";
-                    //document.getElementById("schritte").innerHTML ="";
                 });
-
-    //https://api.spoonacular.com/recipes/716429/information?apiKey=77761af884614b78ac8ac4a488cda91d&includeNutrition=true.
-	//console.log(await reser.translatedText);
-	//document.getElementById("api_hier").innerHTML = reser.translatedText;
-	//return await reser.translatedText;
 	}
 
-//asyncCall("Banane");
-//asyncCall("apple");
+
 get_rezept2("Haselnuss");
 
 
-/*
-'<div><div class="fancyboxIframe" >' +
-'<a data-fancybox-type="iframe" class="fancyboxIframe" href="' + data.results[0].sourceUrl + '" target="_blank" ><img src="' + data.results[0].image + '" class="img-responsive thumbnail" ></a>' +
-                                    '</div>' +
-                                    '<div class=".fancyboxIframe2">' +
-                                        '<h3 class="Vtitle fancyboxIframe2"><a data-fancybox-type="iframe" class="fancyboxIframe2" href="' + data.results[0].sourceUrl + '" target="_blank">' + titel + '</a></h3>'+
-                                    '</div><div  id="cTitle"><i>'+htlm_rezept_text+'</i></div></div>' +
-                                '<div class="clearfix"></div>';
-*/
-
-//summary:
-//erklärung was das für ein Gericht ist
-//muss eigentlich nicht unbedigt rein ist aber ein string mit html formatierung also relativ einfach umzusetzen.
-
-// extendedIngredients:
-//      name:
-//      amount:
-// Liste von inhaltsstoffen
-
-// analyzedInstructions:
-//      step: (String mit anweisung)
-//      equipment: ---> name:   || equipment liste
-//      
-// Liste von Arbeitsschritten pro arbteisschritt step
-
-
 </script>
-<body>
 
 
-<!--
-
-
-    <!DOCTYPE html>
-    <html lang="de">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="">
-        <meta name="keywords" content="">
-        <title>Rezepte: Sesonal und Regional</title>
-        
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/font-awesome.min.css" rel="stylesheet">
-        <link href="css/animate.min.css" rel="stylesheet">
-        <link href="css/owl.carousel.css" rel="stylesheet">
-        <link href="css/owl.transitions.css" rel="stylesheet">
-        <link href="css/prettyPhoto.css" rel="stylesheet">
-        <link href="css/main.css" rel="stylesheet">
-        <link href="css/styles.css" rel="stylesheet">
-        
-        <script src="js/html5shiv.js"></script>
-        <script src="js/respond.min.js"></script>
-        
-        <link rel="shortcut icon" href="images/ico/favicon.png">
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-
-        -->
-
-        <style>
-        .fancyboxIframe{
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 50%;
-        };
-        .fancyboxIframe2{
-            text-align: center;
-        };
-    
-            li {
-            display: block;
-            transition-duration: 0.5s;
-            }
-    
-            li:hover {
-            cursor: pointer;
-            }
-    
-            ul li ul {
-            visibility: hidden;
-            opacity: 0;
-            position: absolute;
-            transition: all 0.5s ease;
-            margin-top: 1rem;
-            left: 0;
-            display: none;
-            }
-    
-            ul li:hover > ul,
-            ul li ul:hover {
-            visibility: visible;
-            opacity: 1;
-            display: block;
-            }
-    
-            ul li ul li {
-            clear: both;
-            width: 130%;
-            }
-    
-        </style>
         <script lang="javascript">
         /////get rezept_suchbegriff
         var rezept = getQueryVariable("r");
